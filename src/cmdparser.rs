@@ -4,9 +4,12 @@ use clap::Parser;
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 pub struct CpuOptions {
-    /// Number of times to greet
+    /// CPU temperature to be reached 
    #[arg(short, long, default_value_t = 60.0)]
     pub max_temp: f32,
+   #[arg(short, long, default_value_t = 4)]
+    /// L3 cache size in MB 
+    pub cache_size: usize,
 }
 
 

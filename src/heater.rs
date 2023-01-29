@@ -2,8 +2,7 @@ use rand::Rng;
 use std::{thread, time};
 use systemstat::platform::PlatformImpl;
 use systemstat::{Platform, System};
-
-const L3_CACHE_SIZE: usize = 5 * (usize::pow(10, 6));
+use crate::cmdparser::CpuOptions;
 
 fn get_random_vec_index(vec_length: usize) -> usize {
     rand::thread_rng().gen_range(0..vec_length)
@@ -19,12 +18,19 @@ fn get_cpu_temp(p: &PlatformImpl) -> f32 {
     }
 }
 
+fn get_ceil_byte_size(cache_size: usize) -> usize {
+    // + 1 to get the size in byte above the l3 cache size
+   (cache_size + 1) * (usize::pow(10, 6))
+}
+
 /* Load instructions that misses in the cache are expensive
 so I allocate a chunk of memory that is bigger than the l3 cache size
 and hop around in this memory */
-pub fn run_heater(max_temp: f32) {
+pub fn run_heater(cpu_options: CpuOptions) {
+    let CpuOptions { max_temp, cache_size } = cpu_options;
+    let cache_byte_size = get_ceil_byte_size(cache_size);
     let sys = System::new();
-    let array_length = L3_CACHE_SIZE / std::mem::size_of::<i32>();
+    let array_length = cache_byte_size / std::mem::size_of::<i32>();
     let burner_array: Vec<u32> = (0..array_length).map(|n| n as u32).collect();
     /*  An infinite loop seems to be working aswell but this heats up the cpu
     way faster */

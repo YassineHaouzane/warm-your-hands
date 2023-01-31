@@ -20,10 +20,10 @@ fn get_cpu_temp(p: &PlatformImpl) -> f32 {
 
 fn get_ceil_byte_size(cache_size: usize) -> usize {
     // + 1 to get the size in byte above the l3 cache size
-   (cache_size + 1) * (usize::pow(10, 6))
+   (cache_size + 1) * usize::pow(10, 6)
 }
 
-/* Load instructions that misses in the cache are expensive
+/* Load instructions that lead to cache misses are expensive
 so I allocate a chunk of memory that is bigger than the l3 cache size
 and hop around in this memory */
 pub fn run_heater(cpu_options: CpuOptions) {
@@ -31,7 +31,7 @@ pub fn run_heater(cpu_options: CpuOptions) {
     let cache_byte_size = get_ceil_byte_size(cache_size);
     let sys = System::new();
     let array_length = cache_byte_size / std::mem::size_of::<i32>();
-    let burner_array: Vec<u32> = (0..array_length).map(|n| n as u32).collect();
+    let burner_array: Vec<usize> = (0..array_length).collect();
     /*  An infinite loop seems to be working aswell but this heats up the cpu
     way faster */
 

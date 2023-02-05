@@ -12,7 +12,7 @@ fn get_cpu_temp(p: &PlatformImpl) -> f32 {
     match p.cpu_temp() {
         Ok(cpu) => cpu,
         Err(e) => {
-            println!("[error]: couldn't get cpu temperature ${}", e);
+            eprintln!("[error]: couldn't get cpu temperature ${}", e);
             f32::MAX
         }
     }

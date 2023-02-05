@@ -28,6 +28,7 @@ so I allocate a chunk of memory that is bigger than the l3 cache size
 and hop around in this memory */
 pub fn run_heater(cpu_options: CpuOptions) {
     let CpuOptions { max_temp, cache_size } = cpu_options;
+    // unwrap here is safe because we made it so in the cmdparser::parse function
     let cache_byte_size = get_ceil_byte_size(cache_size);
     let sys = System::new();
     let array_length = cache_byte_size / std::mem::size_of::<i32>();

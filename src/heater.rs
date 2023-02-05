@@ -39,11 +39,9 @@ pub fn run_heater(cpu_options: CpuOptions) {
     loop {
         let cpu_temp = get_cpu_temp(&sys);
         if cpu_temp < max_temp {
-            println!("We heat ! ${}", cpu_temp);
             let rand_index = get_random_vec_index(array_length);
             let _ = burner_array[rand_index];
         } else {
-            println!("Don't heat !!! ${}", cpu_temp);
             thread::sleep(time::Duration::from_secs(1));
         }
     }
